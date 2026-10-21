@@ -1,0 +1,14 @@
+const MAX_ROWS=30, STORAGE_KEY="madhnab-initatives-table-v1";
+const tbody=document.getElementById("tableBody"), countEl=document.getElementById("recordCount");
+function loadRows(){try{const v=JSON.parse(localStorage.getItem(STORAGE_KEY)||"null");if(Array.isArray(v))return v.slice(0,MAX_ROWS)}catch(e){}return Array.from({length:MAX_ROWS},()=>({teacher:"",title:"",date:"",notes:""}))}
+let rows=loadRows();
+function saveRows(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(rows))}catch(e){alert("تعذر الحفظ في هذا المتصفح")}updateCount()}
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function render(){tbody.innerHTML="";rows.forEach((r,i)=>{const tr=document.createElement("tr");tr.innerHTML=`<td class="numcell">${i+1}</td><td><input aria-label="اسم المعلمة" data-index="${i}" data-field="teacher" value="${esc(r.teacher)}" placeholder="اسم المعلمة"></td><td><input aria-label="عنوان المبادرة" data-index="${i}" data-field="title" value="${esc(r.title)}" placeholder="عنوان المبادرة"></td><td><input aria-label="تاريخ التنفيذ" data-index="${i}" data-field="date" type="date" value="${esc(r.date)}"></td><td><textarea aria-label="ملاحظات" data-index="${i}" data-field="notes" placeholder="ملاحظات">${esc(r.notes)}</textarea></td><td class="screen-only"><button class="delete" data-delete="${i}">مسح</button></td>`;tbody.appendChild(tr)});updateCount()}
+function updateCount(){countEl.textContent=rows.filter(r=>[r.teacher,r.title,r.date,r.notes].some(v=>String(v||"").trim())).length}
+tbody.addEventListener("input",e=>{const el=e.target;if(!el.dataset.field)return;rows[+el.dataset.index][el.dataset.field]=el.value;saveRows()});
+tbody.addEventListener("click",e=>{const b=e.target.closest("[data-delete]");if(!b)return;const i=+b.dataset.delete;if(confirm(`مسح بيانات الصف رقم ${i+1}؟`)){rows[i]={teacher:"",title:"",date:"",notes:""};saveRows();render()}});
+document.getElementById("addRowBtn").addEventListener("click",()=>{const i=rows.findIndex(r=>![r.teacher,r.title,r.date,r.notes].some(v=>String(v||"").trim()));if(i<0){alert("اكتملت الصفوف الثلاثون.");return}tbody.querySelector(`[data-index="${i}"][data-field="teacher"]`)?.focus()});
+document.getElementById("printBtn").addEventListener("click",()=>window.print());
+document.getElementById("exportBtn").addEventListener("click",()=>{const data=[["م","اسم المعلمة","عنوان المبادرة","تاريخ التنفيذ","ملاحظات"],...rows.map((r,i)=>[i+1,r.teacher,r.title,r.date,r.notes])];const csv="\uFEFF"+data.map(a=>a.map(v=>`"${String(v??"").replace(/"/g,'""')}"`).join(",")).join("\r\n");const url=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8;"}));const a=document.createElement("a");a.href=url;a.download="حصر_مبادرات_الثانوية_الأولى_بالمذنب.csv";a.click();URL.revokeObjectURL(url)});
+render();
