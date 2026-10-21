@@ -114,6 +114,20 @@ document.getElementById("exportBtn").addEventListener("click", () => {
 });
 
 if (!window.supabase || !window.supabase.createClient) {
+  setStatus("تعذر تحميل مكتبة Supabase. أعيدي فتح الموقع مع اتصال إنترنت.", "error");
+} else {
+  supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+  setStatus("تم تحميل مكتبة الاتصال، جارٍ اختبار قاعدة البيانات...");
+
+  loadRecords().catch((error) => {
+    console.error("Supabase connection error:", error);
+    setStatus("فشل الاتصال: " + (error.message || "خطأ غير معروف"), "error");
+  });
+}
   setStatus("تعذر تحميل مكتبة الاتصال. تحققي من اتصال الإنترنت ثم أعيدي فتح الصفحة.", "error");
 } else {
   supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
