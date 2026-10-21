@@ -1,12 +1,43 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>حصر مبادرات الثانوية الأولى للبنات بالمذنب</title><link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1d5b4c">
+<title>حصر مبادرات الثانوية الأولى للبنات بالمذنب</title>
+<link rel="stylesheet" href="style.css">
 </head>
-<body><main class="page">
-<header class="hero"><div class="mark">م</div><p class="eyebrow">السجل الإلكتروني للمبادرات</p><h1>حصر مبادرات الثانوية الأولى للبنات بالمذنب</h1><p class="subtitle">سجل موحّد لحصر مبادرات المعلمات وتواريخ تنفيذها</p></header>
-<section class="toolbar"><div class="counter">المبادرات المسجلة: <strong id="recordCount">0</strong> / 30</div><div class="actions"><button id="addRowBtn" class="primary">＋ إضافة مبادرة</button><button id="exportBtn" class="secondary">تصدير CSV</button><button id="printBtn" class="secondary">طباعة</button></div></section>
-<div class="notice">تنبيه: هذه النسخة تحفظ البيانات في المتصفح الحالي فقط. لمشاركة البيانات بين المعلمات والمشرفة، يلزم ربطها بقاعدة بيانات سحابية.</div>
-<section class="table-wrap"><table><thead><tr><th class="num">م</th><th>اسم المعلمة</th><th>عنوان المبادرة</th><th>تاريخ التنفيذ</th><th>ملاحظات</th><th class="screen-only">إجراء</th></tr></thead><tbody id="tableBody"></tbody></table></section>
-<footer>الثانوية الأولى للبنات بالمذنب</footer></main><script src="main.js"></script></body></html>
+<body>
+<main class="page">
+  <header class="hero">
+    <div class="mark">م</div>
+    <p class="eyebrow">السجل الإلكتروني للمبادرات</p>
+    <h1>حصر مبادرات الثانوية الأولى للبنات بالمذنب</h1>
+    <p class="subtitle">سجل موحّد لحصر مبادرات المعلمات وتواريخ تنفيذها</p>
+  </header>
+
+  <section class="toolbar">
+    <div class="counter">المبادرات المسجلة: <strong id="recordCount">0</strong> / 30</div>
+    <div class="actions">
+      <button id="refreshBtn" class="secondary" type="button">تحديث الجدول</button>
+      <button id="exportBtn" class="secondary" type="button">تصدير CSV</button>
+      <button id="printBtn" class="secondary" type="button">طباعة</button>
+    </div>
+  </section>
+
+  <div id="status" class="notice" role="status">جارٍ الاتصال بقاعدة البيانات...</div>
+  <section class="table-wrap">
+    <table>
+      <thead>
+        <tr><th class="num">م</th><th>اسم المعلمة</th><th>عنوان المبادرة</th><th>تاريخ التنفيذ</th><th>ملاحظات</th><th class="screen-only">إجراء</th></tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </section>
+  <footer>الثانوية الأولى للبنات بالمذنب</footer>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="main.js"></script>
+</body>
+</html>
